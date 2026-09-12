@@ -1,0 +1,148 @@
+# Interface definition for thorn MHD_Analysis
+# $Header:$
+
+implements: mhd_analysis
+inherits: SpecGRMHD
+friend: SpecGRMHD, mhd_init, grid
+
+Protected:
+
+CCTK_REAL output type=GF Timelevels=1
+{
+	    rad_out
+	    rho_out
+	    rho_dark_out
+	    rho_dark_diff
+	    rho_dark_frac
+        rho_out_diff
+        rho_out_frac
+        rho_out_total
+        rho_out_total_diff
+        rho_out_total_frac
+        rho_diff_frac
+        total_rho
+	    temp_out
+        temp_out_diff
+        temp_out_frac
+        temp_out_rel
+        temp_out_rel_diff
+        temp_out_rel_frac
+        temp_out_nonrel
+        temp_out_nonrel_diff
+        temp_out_nonrel_frac
+        ienergy
+        ienergy_diff
+        ienergy_frac
+        pp_out
+        pp_out_diff
+	    b_x_out
+        b_x_out_diff
+	    b_y_out
+        b_y_out_diff
+	    b_z_out
+        b_z_out_diff
+        vv_x_out_diff
+        vv_y_out_diff
+        vv_z_out_diff
+        gxx_diff
+        gyy_diff
+        gzz_diff
+        gxy_diff
+        gxz_diff
+        gyz_diff
+	    magT
+	    divb_out
+	    divb_frac
+	    vv_squared_PSD
+        rho_spec_PSD
+        temp_spec_PSD
+        gw_energy_density
+        gwspec_PSD
+        Polarx
+        Polary
+        Polarz
+        geostrain
+        npgwspec_temp
+        npstrain_temp
+        vv_mag
+        bb_mag
+        vv_mag_diff
+        bb_mag_diff
+        rho_ratio_gf
+}  "output variables"
+
+CCTK_REAL analytic type=GF Timelevels=1
+{
+        rho_a_diff
+        b_x_a_diff
+        b_y_a_diff
+        b_z_a_diff
+        vv_x_a_diff
+        vv_y_a_diff
+        vv_z_a_diff
+        rho_error
+        b_x_error
+        b_y_error
+        b_z_error
+        vv_x_error
+        vv_y_error
+        vv_z_error	   
+        rho_error_percent
+        b_x_error_percent
+        b_y_error_percent
+        b_z_error_percent
+        vv_x_error_percent
+        vv_y_error_percent
+        vv_z_error_percent
+}  "output analytic variables"
+
+CCTK_REAL scale_factor TYPE=Scalar Timelevels=2
+{
+		aa_out_avg
+        aa_ratio_avg
+        univ_age
+        HH_out_avg
+        TrK_avg
+        alp_avg
+        HH_true
+        rho_norm
+        rho_dark_norm
+}
+
+
+CCTK_REAL real_time TYPE=Scalar Timelevels=1
+{
+        actual_time
+        time_step
+        univ_age_T1
+        univ_age_T2
+        scale_T1
+        scale_T2
+        rad_out_avg
+        rho_out_avg
+        mass_out_mean
+        rho_dark_avg
+        rho_out_total_avg
+        rho_ratio_scalar
+        temp_out_avg
+        temp_out_rel_avg
+        temp_out_nonrel_avg
+        pp_out_avg
+        b_x_out_avg
+        b_y_out_avg
+        b_z_out_avg
+        vv_x_avg
+        vv_y_avg
+        vv_z_avg
+        gxx_avg
+        gyy_avg
+        gzz_avg
+        gxy_avg
+        gxz_avg
+        gyz_avg
+        sqrtdetg_avg
+        Hubble0
+        strain_avg
+        gwspec_avg
+        scale_output
+}

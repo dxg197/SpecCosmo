@@ -1,0 +1,551 @@
+# Interface definition for thorn SpecGRMHD
+# $Header:$
+
+implements: SpecGRMHD
+inherits: grid, boundary, Slab
+friend: mhd_init, mhd_analysis
+
+USES INCLUDE: Symmetry.h
+USES INCLUDE HEADER: Slab.h
+
+####################################
+###  ALIASED FUNCTIONS FROM MOL  ###
+####################################
+
+CCTK_INT FUNCTION MoLRegisterEvolved(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+CCTK_INT FUNCTION MoLRegisterEvolvedGroup(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+CCTK_INT FUNCTION MoLRegisterConstrainedGroup(CCTK_INT IN ConstrainedIndex)
+CCTK_INT FUNCTION MoLRegisterSaveAndRestoreGroup(CCTK_INT IN SandRIndex)
+CCTK_INT FUNCTION MoLRegisterSaveAndRestore(CCTK_INT IN SandRIndex)
+#CCTK_INT FUNCTION MoLChangeToEvolved(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+#CCTK_INT FUNCTION MoLChangeToConstrained(CCTK_INT IN ConstrainedIndex)
+#CCTK_INT FUNCTION MoLChangeToSaveAndRestore(CCTK_INT IN SandRIndex)
+#CCTK_INT FUNCTION MoLChangeToNone(CCTK_INT IN RemoveIndex)
+
+USES FUNCTION MoLRegisterEvolved
+USES FUNCTION MoLRegisterEvolvedGroup
+USES FUNCTION MoLRegisterConstrainedGroup
+USES FUNCTION MoLRegisterSaveAndRestoreGroup
+USES FUNCTION MoLRegisterSaveAndRestore
+#USES FUNCTION MoLChangeToEvolved
+#USES FUNCTION MoLChangeToConstrained
+#USES FUNCTION MoLChangeToSaveAndRestore
+#USES FUNCTION MoLChangeToNone
+
+
+#########################################
+###  ALIASED FUNCTIONS FROM Boundary  ###
+#########################################
+
+CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, \
+  CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, \
+  CCTK_STRING IN var_name, CCTK_STRING IN bc_name)
+CCTK_INT FUNCTION Boundary_SelectGroupForBC(CCTK_POINTER_TO_CONST IN GH, \
+  CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, \
+  CCTK_STRING IN group_name, CCTK_STRING IN bc_name)
+
+USES FUNCTION Boundary_SelectVarForBC
+USES FUNCTION Boundary_SelectGroupForBC
+
+########################
+###  Grid Variables  ###
+########################
+
+Protected:
+
+# General Relativity Input/Output Variables
+
+CCTK_REAL metric TYPE = GF timelevels = 1 tags='tensortypealias="DD_sym"'
+{
+  gtt,gtx,gty,gtz,gxx,gxy,gxz,gyy,gyz,gzz
+} "ADM 3-metric g_ij"
+
+CCTK_REAL inv_metric TYPE = GF timelevels = 1 tags='tensortypealias="DD_sym"'
+{
+  igtt,igtx,igty,igtz,igxx,igxy,igxz,igyy,igyz,igzz
+} "ADM inverse 3-metric g^ij"
+
+CCTK_REAL curv TYPE = GF timelevels = 1 tags='tensortypealias="DD_sym"'
+{
+  kxx,kxy,kxz,kyy,kyz,kzz
+} "ADM extrinsic curvature K_ij"
+
+# Magnetohydrodynamics Input/Output Variables
+
+CCTK_REAL evolvevars type=GF Timelevels=3
+{
+	rho_star
+	tau
+	S_x
+	S_y
+	S_z
+	bb_x
+	bb_y
+	bb_z
+	psib0
+	rho_star_dark
+	tau_dark
+	SD_x
+	SD_y
+	SD_z
+	EErad
+}  "evolution variables"
+
+CCTK_REAL dotvars type=GF Timelevels=1
+{
+	rho_star_dt
+	tau_dt
+	S_x_dt
+	S_y_dt
+	S_z_dt
+	bb_x_dt
+	bb_y_dt
+	bb_z_dt
+	psib_dt
+	rho_star_dark_dt
+	tau_dark_dt
+	SD_x_dt
+	SD_y_dt
+	SD_z_dt
+	EErad_dt
+	alpha_dt
+    betax_dt
+    betay_dt
+    betaz_dt
+    bssn_bb_x_dt
+    bssn_bb_y_dt
+    bssn_bb_z_dt
+	phi_dt
+	bssn_gxx_dt
+	bssn_gyy_dt
+	bssn_gzz_dt
+	bssn_gxy_dt
+	bssn_gxz_dt
+	bssn_gyz_dt
+	bssn_Axx_dt
+	bssn_Ayy_dt
+	bssn_Azz_dt
+	bssn_Axy_dt
+	bssn_Axz_dt
+	bssn_Ayz_dt
+	bssn_K_dt
+	bssn_gamma_x_dt
+	bssn_gamma_y_dt
+	bssn_gamma_z_dt
+}  "rhs of evolution equations"
+
+CCTK_REAL calcvars type=GF Timelevels=1
+{
+  	Speed_Sound
+  	Speed_Alfven
+  	Cwave_x_min
+  	Cwave_y_min
+  	Cwave_z_min
+  	Cwave_x_max
+  	Cwave_y_max
+  	Cwave_z_max
+  	sqrtdetg
+  	epsilon
+  	rho
+  	rho_critical
+  	pp
+  	uu_t
+  	uu_x
+  	uu_y
+  	uu_z
+  	vv_x
+  	vv_y
+  	vv_z
+  	div_vv
+  	b_x
+  	b_y
+  	b_z
+  	aa_x
+  	aa_y
+  	aa_z
+  	beta_t
+  	beta_x
+  	beta_y
+  	beta_z
+  	beta2
+  	divb
+  	rho_total
+  	Ttt_mhd
+  	Ttx_mhd
+  	Tty_mhd
+  	Ttz_mhd
+  	Txx_mhd
+  	Txy_mhd
+  	Txz_mhd
+  	Tyy_mhd
+  	Tyz_mhd
+  	Tzz_mhd
+  	uud_t
+  	uud_x
+  	uud_y
+  	uud_z
+  	vvd_x
+  	vvd_y
+  	vvd_z
+  	Ttt_dark
+  	Ttx_dark
+  	Tty_dark
+  	Ttz_dark
+  	Txx_dark
+  	Txy_dark
+  	Txz_dark
+  	Tyy_dark
+  	Tyz_dark
+  	Tzz_dark
+  	rho_dark
+  	Qxx
+  	Qyy
+  	Qzz
+  	Qxy
+  	Qxz
+  	Qyz
+  	trQ
+  	temp_geo
+  	Ttt_vac
+  	Ttx_vac
+  	Tty_vac
+  	Ttz_vac
+  	Txx_vac
+  	Txy_vac
+  	Txz_vac
+  	Tyy_vac
+  	Tyz_vac
+  	Tzz_vac
+  	F_rho_x
+    F_rho_y
+    F_rho_z
+    F_tau_x
+    F_tau_y
+    F_tau_z
+    F_SS_xx
+    F_SS_yx
+    F_SS_xz
+    F_SS_xy
+    F_SS_yy
+    F_SS_zy
+    F_SS_zx
+    F_SS_yz
+    F_SS_zz
+    F_BB_xy
+    F_BB_yx
+    F_BB_xz
+    F_BB_zx
+    F_BB_yz
+    F_BB_zy
+    F_rho_dark_x
+    F_rho_dark_y
+    F_rho_dark_z
+    F_tau_dark_x
+    F_tau_dark_y
+    F_tau_dark_z
+    F_SSD_xx
+    F_SSD_yx
+    F_SSD_xz
+    F_SSD_xy
+    F_SSD_yy
+    F_SSD_zy
+    F_SSD_zx
+    F_SSD_yz
+    F_SSD_zz
+} "Primative variables, vorticity, Stress-Energy Tensor, etc..."
+
+CCTK_REAL bssn_variables type=GF Timelevels=3
+{
+  	alpha
+    alpha_x
+    alpha_y
+    alpha_z
+    betax
+    betay
+    betaz
+    betax1
+    betax2
+    betax3
+    betay1
+    betay2
+    betay3
+    betaz1
+    betaz2
+    betaz3
+    bssn_bb_x
+    bssn_bb_y
+    bssn_bb_z
+    phi
+    bssn_gxx
+    bssn_gyy
+    bssn_gzz
+    bssn_gxy
+    bssn_gxz
+    bssn_gyz
+    TrK
+    bssn_Axx
+    bssn_Ayy
+    bssn_Azz
+    bssn_Axy
+    bssn_Axz
+    bssn_Ayz
+    bssn_gamma_x
+    bssn_gamma_y
+    bssn_gamma_z
+    bssn_dk_x
+    bssn_dk_y
+    bssn_dk_z
+    bssn_dkij_xxx
+    bssn_dkij_yxx
+    bssn_dkij_zxx
+    bssn_dkij_xyy
+    bssn_dkij_yyy
+    bssn_dkij_zyy
+    bssn_dkij_xzz
+    bssn_dkij_yzz
+    bssn_dkij_zzz
+    bssn_dkij_xxy
+    bssn_dkij_yxy
+    bssn_dkij_zxy
+    bssn_dkij_xxz
+    bssn_dkij_yxz
+    bssn_dkij_zxz
+    bssn_dkij_xyz
+    bssn_dkij_yyz
+    bssn_dkij_zyz
+} "bssn variables"
+
+CCTK_REAL bssn_variables_Misc type=GF Timelevels=1
+{
+    Chris_xxx
+    Chris_xxy
+    Chris_xxz
+    Chris_xyx
+    Chris_xyy
+    Chris_xyz
+    Chris_xzx
+    Chris_xzy
+    Chris_xzz
+    Chris_yxx
+    Chris_yxy
+    Chris_yxz
+    Chris_yyx
+    Chris_yyy
+    Chris_yyz
+    Chris_yzx
+    Chris_yzy
+    Chris_yzz
+    Chris_zxx
+    Chris_zxy
+    Chris_zxz
+    Chris_zyx
+    Chris_zyy
+    Chris_zyz
+    Chris_zzx
+    Chris_zzy
+    Chris_zzz
+    Ricci_xx
+    Ricci_yy
+    Ricci_zz
+    Ricci_xy
+    Ricci_xz
+    Ricci_yz
+    Ricci_phi_xx
+    Ricci_phi_yy
+    Ricci_phi_zz
+    Ricci_phi_xy
+    Ricci_phi_xz
+    Ricci_phi_yz
+    Si_x
+    Si_y
+    Si_z
+    Sij_xx
+    Sij_yy
+    Sij_zz
+    Sij_xy
+    Sij_xz
+    Sij_yz
+} "Other bssn variables"
+
+CCTK_REAL adm_bssn_cons type=GF Timelevels=1
+{
+    ham
+    momx
+    momy
+    momz
+    dGx
+    dGy
+    dGz
+    dHx
+    dHy
+    dHz
+    AATF
+    detg1
+    Ek
+} "bssn constraints"
+
+Public:
+ 
+CCTK_REAL temp_variables1 type=GF Timelevels=1
+{
+    temp_phi0
+    temp_phi1
+    temp_phi2
+    temp_phi3
+    
+    temp_phi0x
+    temp_phi0y
+    temp_phi0z
+    temp_phi1x
+    temp_phi1y
+    temp_phi1z
+    temp_phi2x
+    temp_phi2y
+    temp_phi2z
+    temp_phi3x
+    temp_phi3y
+    temp_phi3z
+    
+    temp_phi0tt
+    temp_phi0tx
+    temp_phi0ty
+    temp_phi0tz
+    temp_phi0xx
+    temp_phi0yy
+    temp_phi0zz
+    temp_phi0xy
+    temp_phi0xz
+    temp_phi0yz
+    temp_phi0yx
+    temp_phi0zx
+    temp_phi0zy
+    temp_phi1tt
+    temp_phi1tx
+    temp_phi1ty
+    temp_phi1tz
+    temp_phi1xx
+    temp_phi1yy
+    temp_phi1zz
+    temp_phi1xy
+    temp_phi1xz
+    temp_phi1yz
+    temp_phi1yx
+    temp_phi1zx
+    temp_phi1zy
+    temp_phi2tt
+    temp_phi2tx
+    temp_phi2ty
+    temp_phi2tz
+    temp_phi2xx
+    temp_phi2yy
+    temp_phi2zz
+    temp_phi2xy
+    temp_phi2xz
+    temp_phi2yz
+    temp_phi2yx
+    temp_phi2zx
+    temp_phi2zy
+    temp_phi3tt
+    temp_phi3tx
+    temp_phi3ty
+    temp_phi3tz
+    temp_phi3xx
+    temp_phi3yy
+    temp_phi3zz
+    temp_phi3xy
+    temp_phi3xz
+    temp_phi3yz
+    temp_phi3yx
+    temp_phi3zx
+    temp_phi3zy
+} "Temp Variables for 1st Derivatives"
+
+CCTK_REAL temp_variables2 type=GF Timelevels=1
+{
+    temp_phi11
+    temp_phi22
+    temp_phi33
+    temp_phi12
+    temp_phi13
+    temp_phi23
+    
+    temp_phi11x
+    temp_phi11y
+    temp_phi11z
+    temp_phi22x
+    temp_phi22y
+    temp_phi22z
+    temp_phi33x
+    temp_phi33y
+    temp_phi33z
+    temp_phi12x
+    temp_phi12y
+    temp_phi12z
+    temp_phi13x
+    temp_phi13y
+    temp_phi13z
+    temp_phi23x
+    temp_phi23y
+    temp_phi23z
+    
+    temp_phi11tt
+    temp_phi11tx
+    temp_phi11ty
+    temp_phi11tz
+    temp_phi11xx
+    temp_phi11yy
+    temp_phi11zz
+    temp_phi11xy
+    temp_phi11xz
+    temp_phi11yz
+    temp_phi22tt
+    temp_phi22tx
+    temp_phi22ty
+    temp_phi22tz
+    temp_phi22xx
+    temp_phi22yy
+    temp_phi22zz
+    temp_phi22xy
+    temp_phi22xz
+    temp_phi22yz
+    temp_phi33tt
+    temp_phi33tx
+    temp_phi33ty
+    temp_phi33tz
+    temp_phi33xx
+    temp_phi33yy
+    temp_phi33zz
+    temp_phi33xy
+    temp_phi33xz
+    temp_phi33yz
+    temp_phi12tt
+    temp_phi12tx
+    temp_phi12ty
+    temp_phi12tz
+    temp_phi12xx
+    temp_phi12yy
+    temp_phi12zz
+    temp_phi12xy
+    temp_phi12xz
+    temp_phi12yz
+    temp_phi13tt
+    temp_phi13tx
+    temp_phi13ty
+    temp_phi13tz
+    temp_phi13xx
+    temp_phi13yy
+    temp_phi13zz
+    temp_phi13xy
+    temp_phi13xz
+    temp_phi13yz
+    temp_phi23tt
+    temp_phi23tx
+    temp_phi23ty
+    temp_phi23tz
+    temp_phi23xx
+    temp_phi23yy
+    temp_phi23zz
+    temp_phi23xy
+    temp_phi23xz
+    temp_phi23yz
+} "Temp Variables for 2nd Derivatives"

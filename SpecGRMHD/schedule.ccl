@@ -1,0 +1,213 @@
+# Schedule definitions for thorn SpecGRMHD
+# $Header:$
+
+STORAGE: evolvevars[3] 
+STORAGE: dotvars 
+STORAGE: calcvars
+STORAGE: adm_bssn_cons 
+STORAGE: bssn_variables[3]
+STORAGE: metric 
+STORAGE: inv_metric 
+STORAGE: curv 
+STORAGE: bssn_variables_Misc
+
+### Startup ###
+
+schedule SpecGRMHD_Startup AT STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "Register banner"
+
+### Calc Initial Symmetries ###
+
+schedule SpecGRMHD_InitSymBound AT BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "Schedule symmetries"
+
+### Calculate Initial Data ###
+
+schedule GROUP GRMHD_INIT AT CCTK_INITIAL
+{
+} "Initialize GRMHD variables"
+
+### Convert ADM Initial Data to BSSN Variables ###
+
+schedule calcbssn IN GRMHD_INIT AFTER grmhd_initial
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::metric(Everywhere)
+  READS: SpecGRMHD::curv(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::inv_metric(Everywhere)
+  WRITES: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::adm_bssn_cons(Everywhere)
+} "Convert the ADM variables to bssn"
+
+### Register Variables with MoL ###
+
+schedule GRMHD_MoLRegister IN MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register evolution variables for MoL"
+
+### Calc RHS of Equations ###
+
+schedule GROUP GRMHD_RHS IN MoL_CalcRHS
+{
+} "Calc RHS of Evolution Equations"
+
+schedule bssn_RHS IN GRMHD_RHS
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::bssn_variables_Misc(Everywhere)
+  WRITES: SpecGRMHD::adm_bssn_cons(Everywhere)
+  WRITES: SpecGRMHD::dotvars(Interior)
+} "Calculate the RHS of BSSN equations"
+
+schedule MHD_RHS IN GRMHD_RHS AFTER bssn_RHS
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::metric(Everywhere)
+  READS: SpecGRMHD::evolvevars(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::dotvars(Interior)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Calculate the RHS of MHD equations"
+
+if (add_DM) {
+
+schedule Dark_RHS IN GRMHD_RHS AFTER MHD_RHS
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::evolvevars(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::dotvars(Interior)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Calculate the RHS of Dark Matter equations"
+
+}
+
+### Calc ADM Variables ###
+
+schedule calcadm IN GRMHD_RHS BEFORE bssn_RHS
+{
+  LANG: C
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::inv_metric(Everywhere)
+  WRITES: SpecGRMHD::metric(Everywhere)
+  WRITES: SpecGRMHD::curv(Everywhere)
+  WRITES: SpecGRMHD::sqrtdetg(Everywhere)
+} "Convert the bssn variables to ADM"
+
+schedule calcadm IN MoL_PostStep BEFORE Calc_Boundaries
+{
+  LANG: C
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::inv_metric(Everywhere)
+  WRITES: SpecGRMHD::metric(Everywhere)
+  WRITES: SpecGRMHD::curv(Everywhere)
+  WRITES: SpecGRMHD::sqrtdetg(Everywhere)
+} "Convert the bssn variables to ADM"
+
+### Calc Stress-Energy Tensors ###
+
+schedule GROUP Tmunu IN MoL_PostStep AFTER calcadm
+{
+} "Calc RHS of Evolution Equations"
+
+schedule GROUP Tmunu IN GRMHD_RHS AFTER calcadm BEFORE bssn_RHS
+{
+} "Calc RHS of Evolution Equations"
+
+schedule MHD_Tmunu IN Tmunu 
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::evolvevars(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Calculates Primative Variables and MHD Tmunu"
+
+if (add_DM) {
+
+schedule Dark_Tmunu IN Tmunu AFTER MHD_Tmunu
+{
+  LANG: C
+  READS: SpecGRMHD::evolvevars(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Calculate Dark Matter Tmunu"
+
+}
+
+if (clean) {
+
+schedule B_Clean IN MoL_PostStep BEFORE Calc_Boundaries AFTER Tmunu
+{
+  LANG: C
+  STORAGE: temp_variables1 
+  STORAGE: temp_variables2
+  READS: SpecGRMHD::evolvevars(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Remove Divergences from B-field"
+	
+}
+
+### Calc Boundary Conditions ###
+
+schedule GROUP Calc_Boundaries IN MoL_PostStep
+{
+} "Calc RHS of Evolution Equations"
+
+schedule bssn_Boundaries IN Calc_Boundaries
+{
+  LANG: C
+  SYNC: bssn_variables bssn_variables_Misc adm_bssn_cons 
+  WRITES: SpecGRMHD::bssn_variables(Boundary)
+  WRITES: SpecGRMHD::bssn_variables_Misc(Boundary)
+  WRITES: SpecGRMHD::adm_bssn_cons(Boundary)
+} "Boundaries of Space-Time"
+
+schedule GROUP ApplyBCs AS BSSN_ApplyBCs IN Calc_Boundaries AFTER bssn_Boundaries
+{
+} "Apply boundary conditions"
+
+schedule MHD_Boundaries IN Calc_Boundaries AFTER BSSN_ApplyBCs
+{
+  LANG: C
+  SYNC: evolvevars calcvars 
+  WRITES: SpecGRMHD::evolvevars(Boundary)
+  WRITES: SpecGRMHD::calcvars(Boundary)
+} "Boundaries of MHD"
+
+schedule GROUP ApplyBCs AS MHD_ApplyBCs IN Calc_Boundaries AFTER MHD_Boundaries
+{
+} "Apply boundary conditions"
+
+
+

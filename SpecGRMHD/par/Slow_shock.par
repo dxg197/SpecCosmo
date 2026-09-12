@@ -1,0 +1,110 @@
+# Parameter File for Cosmological GRMHD simulation  
+
+ActiveThorns = "SystemStatistics slab boundary cartgrid3d coordbase ioutil initbase vectors carpet carpetreduce carpetioascii carpetiobasic carpetioscalar carpetinterp2 carpetlib carpetregrid2 carpetslab periodiccarpet timers localinterp2 localreduce mol symbase time  nanchecker mhd_analysis mhd_init specgrmhd mpi zlib"
+
+time::dtfac                                  = 0.002
+
+
+Cactus::cctk_itlast                          = 200
+Cactus::cctk_initial_time                    = 0.0
+cactus::cctk_timer_output                    = "full"
+
+Nanchecker::check_every                      = 10
+Nanchecker::check_after                      = 10
+Nanchecker::check_vars                       = "specgrmhd::metric mhd_analysis::rho_out mhd_analysis::bb_mag"
+Nanchecker::action_if_found                  = "terminate"
+
+grid::type                                   = "byrange" 
+grid::xmin                                   = -0.04
+grid::xmax                                   =  0.04
+grid::ymin                                   = -0.04
+grid::ymax                                   =  0.04
+grid::zmin                                   = -2.0
+grid::zmax                                   =  2.0
+grid::domain                                 = "full"  
+
+driver::global_nx                            = 7  
+driver::global_ny                            = 7 
+driver::global_nz                            = 40  
+driver::ghost_size                           = 3
+
+periodiccarpet::periodic                     = "no"
+
+Carpet::max_refinement_levels                = 1
+Carpet::refinement_factor                    = 2
+Carpet::enable_all_storage                   = "yes"
+Carpet::poison_new_timelevels                = "no" 
+Carpet::adaptive_stepsize                    = "yes" 
+
+CarpetLib::poison_new_memory                 = "no"  
+
+CarpetRegrid2::regrid_every                  = -1
+
+mol::ode_method                              = "RK45CK"
+mol::AB_Type                                 = "4"
+mol::MoL_Intermediate_Steps                  =  6 
+mol::MoL_Num_Scratch_Levels                  =  6
+mol::RK_stepsize                             = "yes" 
+mol::maximum_relative_error                  = 5.0e-7  
+mol::print_adams_step                        = "no"    
+mol::maximum_increase                        = 1.05    
+mol::maximum_decrease                        = 0.95     
+mol::maximum_stepsize                        = 1.0   
+mol::minimum_stepsize                        = 1.0e-14
+mol::AB_Step_Type                            = "Norm"
+mol::big_AB_steps                            = "yes"
+mol::limit_AB_steps                          = "yes"
+mol::disable_prolongation                    = "no"
+
+mhd_init::initial_data                       = "flatspace"      
+mhd_init::initial_gauge                      = "geodesic"    
+mhd_init::gauge_condition                    = "geodesic"                     
+mhd_init::initial_mhd                        = "slow_shock" 
+mhd_init::itime                              = 0.0
+mhd_init::maxvel                             = 1.0    
+
+specgrmhd::ch                                = 1.0  
+specgrmhd::cp                                = 10.0
+specgrmhd::bound                             = "flat"
+specgrmhd::diff                              = "Spectral"       
+specgrmhd::sigma                             = 0.5
+specgrmhd::add_AV_bulk                       = "no" 
+specgrmhd::add_AV_shear                      = "no"  
+specgrmhd::kphi                              = 1.0
+specgrmhd::kgam                              = 1.0
+specgrmhd::kalpha                            = 1.0
+specgrmhd::kbeta                             = 1.0
+specgrmhd::slicing                           = "None"
+specgrmhd::fix_lapse                         = "yes"
+specgrmhd::fix_shift                         = "yes"
+specgrmhd::resistance                        = "yes"  
+specgrmhd::clean                             = "no" 
+specgrmhd::add_DM                            = "no" 
+specgrmhd::nn                                = 0.0
+specgrmhd::kl                                = 0.1
+specgrmhd::kq                                = 0.1
+specgrmhd::rho_frac_max                      = 1.0
+specgrmhd::neg_div                           = "yes"
+specgrmhd::charge                            = 1.0 
+specgrmhd::scp                               = 8.0e-2
+specgrmhd::e1                                = 1.0e-15           
+specgrmhd::sensitivity                       = 1.0e-10
+specgrmhd::reconstruction                    = "yes"
+
+mhd_analysis::calc_spec                      = "no" 
+mhd_analysis::calc_transition                = "no" 
+mhd_analysis::calc_expansion                 = "no"
+mhd_analysis::clean_scalars                  = "no"
+mhd_analysis::keep_flat                      = "no"
+
+iobasic::outinfo_every                       = 1
+iobasic::outinfo_vars                        = "mhd_analysis::rho_out mhd_analysis::temp_out" 
+
+IOScalar::outScalar_every                     = 1
+IOScalar::outScalar_reductions                = "minimum maximum average norm2"
+IOScalar::outScalar_vars                      = "specgrmhd::evolvevars specgrmhd::calcvars specgrmhd::adm_bssn_cons mhd_analysis::output mhd_analysis::real_time specgrmhd::bssn_variables_Misc specgrmhd::bssn_variables"
+
+IOASCII::out1D_every                         = 1
+IOASCII::out1D_vars                          = "specgrmhd::calcvars mhd_analysis::output specgrmhd::evolvevars"   
+
+IO::out_dir                                  = "shock/slow_shock"     

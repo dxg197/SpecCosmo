@@ -1,0 +1,121 @@
+# Parameter definitions for thorn MHD_Analysis
+# $Header:$
+
+shares: MHD_INIT
+USES CCTK_REAL itime
+USES CCTK_REAL aa
+USES CCTK_REAL aa0
+USES CCTK_REAL HH
+USES CCTK_REAL iplusA
+USES CCTK_REAL icrossB
+USES CCTK_REAL nw
+USES CCTK_REAL iBx
+USES CCTK_REAL iBy
+USES CCTK_REAL iBz
+USES CCTK_REAL irho
+USES CCTK_REAL irho_dark
+USES CCTK_REAL irad
+USES CCTK_REAL itemp
+USES CCTK_REAL Amp
+USES CCTK_REAL eps_cof
+USES CCTK_REAL eps_cof0
+USES CCTK_REAL velocity_spec
+USES CCTK_REAL shift_vx
+USES CCTK_REAL shift_vy
+USES CCTK_REAL shift_vz
+USES CCTK_REAL shift_vr
+USES CCTK_REAL maxvel
+USES CCTK_REAL maxvel_EW
+USES CCTK_REAL maxvel_QCD
+USES CCTK_REAL noise_amplitude_metric
+USES CCTK_REAL noise_amplitude_curv
+USES CCTK_REAL noise_amplitude_lapse
+USES CCTK_REAL noise_amplitude_shift
+USES CCTK_REAL cosmo_constant
+USES KEYWORD gowdytyp
+USES KEYWORD gauge_condition
+USES BOOLEAN nonrel
+USES BOOLEAN random
+USES CCTK_REAL Flatness_Ratio
+USES CCTK_REAL xmin0
+USES CCTK_REAL xmax0
+USES CCTK_REAL ymin0
+USES CCTK_REAL ymax0
+USES CCTK_REAL zmin0
+USES CCTK_REAL zmax0
+
+shares: SpecGRMHD
+USES CCTK_REAL gam
+USES CCTK_REAL sigma
+USES CCTK_REAL TrK_max
+USES BOOLEAN clean
+USES KEYWORD Biermann_mode
+USES KEYWORD slicing
+
+restricted:
+
+BOOLEAN keep_flat "Put bounds on rho_ratio"
+{
+ : :: ""
+} "yes"
+
+CCTK_REAL min_rho_ratio "Minimum value of rho_ratio"
+{
+  0:*         :: "Positive"
+} 1.0
+
+CCTK_REAL max_rho_ratio "Maximum value of rho_ratio"
+{
+  0:*         :: "Positive"
+} 1.05
+
+BOOLEAN calc_analytic "Calculate Analytic Solution from Duez paper"
+{
+ : :: ""
+} "no"
+
+BOOLEAN calc_spec "Calculate Spectrum"
+{
+} no
+
+CCTK_REAL data_out_scale "Scale Factor to output parameters"
+{
+  0:*         :: "Positive"
+} 0.0
+
+CCTK_REAL EW_scale "Scale Factor to EW Phase Transition"
+{
+  0:*         :: "Positive"
+} 6.144e-16
+
+CCTK_REAL QCD_scale "Scale Factor to QCD Phase Transition"
+{
+  0:*         :: "Positive"
+} 6.62e-13
+
+CCTK_REAL Nuc_scale "Scale Factor to Primordial Nucleosynthesis"
+{
+  0:*         :: "Positive"
+} 2.7e-9
+
+CCTK_REAL trans_time_EW "How long EW Phase Transition will last"
+{
+  0:*         :: "Positive"
+} 1.0e-2
+
+CCTK_REAL trans_time_QCD "How long QCD Phase Transition will last"
+{
+  0:*         :: "Positive"
+} 1.0e-2
+
+BOOLEAN calc_transition "Calculate Phase Transitions"
+{
+} no
+
+BOOLEAN clean_scalars "reduce noise in scalar perturbations"
+{
+} no
+
+BOOLEAN calc_expansion "Update Gridsize with cosmic expansion"
+{
+} no

@@ -1,0 +1,6 @@
+# Interface definition for thorn MHD_INIT
+# $Header:$
+
+implements: mhd_init
+inherits: SpecGRMHD, GRID
+friend: SpecGRMHD, mhd_analysis

@@ -1,0 +1,18 @@
+# Main make.code.defn file for thorn MHD_INIT
+# $Header:$
+
+# Source files in this directory
+SRCS = bondi.F90 cactus.F90 constants_init.F90 coords.F90    \
+       flatspace.F90 geodesic.F90 homo_mhd.F90 initial.F90   \
+       noise.F90 standingwave.F90 frw_linear.F90 frw_rot.F90 \
+       gaugewave.F90 gowdy.F90 gowdylapse.F90 kasner.F90     \
+       pointwise_init.F90 empty.F90  matinv_init.F90         \
+       standingwave3D.F90 tensor_init.F90 turb_mhd.F90       \
+       fast_shock.F90 slow_shock.F90 fast_rarefaction.F90    \
+       compound.F90 slow_rarefaction.F90 shock_tube1.F90     \
+       shock_tube2.F90 alfven.F90 collision.F90              \
+       periodic_shock.F90 spec_init.F90 frw.F90              \
+       scale_gauge.F90 FFTW_init.c
+       
+# Subdirectories containing source files
+SUBDIRS = 

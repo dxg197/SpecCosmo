@@ -1,0 +1,444 @@
+# Parameter definitions for thorn MHD_INIT
+# $Header:$
+ 
+shares: SpecGRMHD
+
+USES CCTK_REAL gam
+USES KEYWORD diff
+
+restricted:
+
+# Initial Spacetime
+
+KEYWORD initial_data "initial spacetime"
+{
+  "flatspace"   :: "Flat Space"
+  "kasner"      :: "Kasner Space-time"
+  "gowdy"       :: "Gowdy T^3 cosmology"
+  "gaugewave"   :: "Gauge Wave transformation of flatspace"
+  "bondi"       :: "Bondi Waves"
+  "swave"       :: "Standing Waves"
+  "swave3D"     :: "3D Standing Waves"
+  "frw_linear"  :: "FRW spacetime with linear GW"
+  "frw_rot"     :: "FRW spacetime with rotating GW"
+  "frw"         :: "FRW sapcetime with white noise GW"
+} "flatspace"
+
+CCTK_REAL iplusA "initial plus gravity wave amplitude"
+{
+ 0:* :: "Positive"
+} 0.0     
+
+CCTK_REAL icrossB "initial cross gravity wave amplitude"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL rho_pert "magnetude of density perturbations"
+{
+ 0:* :: "Positive"
+} 1.0e-5
+
+CCTK_REAL rho_dark_pert "magnetude of dark matter density perturbations"
+{
+ 0:* :: "Positive"
+} 1.0e-5
+
+CCTK_REAL temp_pert "magnetude of temperature perturbations"
+{
+ 0:* :: "Positive"
+} 1.0e-5
+
+CCTK_REAL ts_ratio "tensor/scalar ratio"
+{
+ 0:* :: "Positive"
+} 0.01
+
+CCTK_REAL nw "Number of Wave-lengths"
+{
+ 0:* :: "non-negative"
+} 0.0
+
+CCTK_REAL HH "Initial Hubble Parameter" STEERABLE = ALWAYS
+{
+ 0:* :: "non-negative"
+} 0.0
+
+CCTK_REAL cosmo_constant "Cosmological Constant in inverse s^2"
+{
+ *:* :: "Anything"
+} 9.9504e-36
+
+CCTK_REAL Beta0 "slow-roll parameter"
+{
+ *:* :: "Anything"
+} -1.9
+
+CCTK_REAL aa "Initial Universal Scale Factor used for amplitude calculation"
+{
+ 0:* :: "non-negative"
+} 1.0
+
+CCTK_REAL aa0 "Initial Universal Scale Factor used for metric/curv calculation"
+{
+ 0:* :: "non-negative"
+} 1.0
+
+BOOLEAN accelerate "Assume an accelerating universe"
+{
+} "no"
+
+BOOLEAN random "use random values instead of spectrum"
+{
+} "no"
+
+BOOLEAN nonrel "use non-relativistic plasma"
+{
+} "no"
+
+CCTK_REAL TH "CP violating Birefringent Parameter"
+{
+ 0:* :: "non-negative"
+} 1.0D-5
+
+# Kasner Space-time Parameter
+
+CCTK_REAL kasner_param "Kasner Parameter" 
+{
+  0:* :: "non-negative"
+} 1.0
+
+# Gowdy parameters
+
+KEYWORD  gowdytyp "expanding or collapsing gowdy cosmology"
+{
+  "expand"     :: "expanding Gowdy Cosmology"
+  "collapse"   :: "collapsing Gowdy Cosmology"
+} "expand"
+
+CCTK_REAL Amp "Amplitude"
+{
+  0:* :: "non-negative"
+} 0.0    
+
+# Gauge Condition
+
+KEYWORD initial_gauge "initial gauge"
+{
+  "none"        :: "do not calculate initial gauge"
+  "geodesic"    :: "geodesic gauge"
+  "scale"       :: "lapse depends on scale factor"
+  "gowdy"       :: "Gowdy T^3 cosmology"
+  "gwave"       :: "Gauge for Nonlinear Gauge Wave"
+} "geodesic"
+
+KEYWORD gauge_condition "gauge condition if fixed_lapse and fixed_shift are used"
+{
+  "none"        :: "do not calculate gauge analytically"
+  "geodesic"    :: "Geodesic Gauge"
+  "scale"       :: "lapse depends on scale factor"
+  "gowdy"       :: "Gowdy T^3 cosmology"
+  "gwave"       :: "Gauge for Nonlinear Gauge Wave"
+  "geod"        :: "Desensitized Geodesic Gauge"
+} "none"
+
+
+# Variation of the shift: add a constant
+
+CCTK_REAL shift_vx "additional shift in x direction"
+{
+  *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL shift_vy "additional shift in y direction"
+{
+  *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL shift_vz "additional shift in z direction"
+{
+  *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL shift_vr "additional shift in radial direction"
+{
+  *:* :: "no restriction"
+} 0.0
+
+# Variation of the evolved quantities: add noise
+
+CCTK_REAL noise_amplitude_metric "amplitude of additional noise on initial data of metric"
+{
+  0:* :: "non-negative"
+} 0.0
+
+CCTK_REAL noise_amplitude_curv "amplitude of additional noise on initial data pf extrinsic curvature"
+{
+  0:* :: "non-negative"
+} 0.0
+
+CCTK_REAL noise_amplitude_lapse "amplitude of additional noise on lapse"
+{
+  0:* :: "non-negative"
+} 0.0
+
+CCTK_REAL noise_amplitude_shift "amplitude of additional noise on shift"
+{
+  0:* :: "non-negative"
+} 0.0
+
+# Plasma State
+
+KEYWORD initial_mhd "initial plasma state"
+{
+  "none"        :: "do not calculate initial mhd"
+  "empty"       :: "empty space"
+  "homo"        :: "homogenous plasma"
+  "turb"        :: "turbulent plasma"
+  "alfven"      :: "Alfven Shock Test"
+  "collision"   :: "Collision Test"
+  "compound"    :: "Compound Test"
+  "fast_rare"   :: "Switch-off Fast Rarefaction"
+  "fast_shock"  :: "Fast Shock"
+  "shock1"      :: "Shock Tube 1"
+  "shock2"      :: "Shock Tube 2"
+  "slow_rare"   :: "Switch-on Slow Rarefaction"
+  "slow_shock"  :: "Slow Shock"
+  "periodic"    :: "Periodic Shock"
+  "spec"        :: "Cosmological Spectrum"
+} "none"
+
+# Initial MHD variables
+
+CCTK_REAL irho "initial matter density"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL irad "initial radiation energy density"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL itemp "initial temperature"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL itime "initial time in seconds"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL maxvel "amplitude of maximum initial velocity"
+{
+ 0.0:* :: "Positive"
+} 0.0
+
+CCTK_REAL maxvel_EW "amplitude of maximum initial velocity for EW Phase Transition"
+{
+ 0.0:* :: "Positive"
+} 0.0
+
+CCTK_REAL maxvel_QCD "amplitude of maximum initial velocity for QCD Phase Transition"
+{
+ 0.0:* :: "Positive"
+} 0.0
+
+CCTK_REAL maxbb "amplitude of maximum initial random B-field"
+{
+ 0.0:* :: "Positive"
+} 0.0
+
+CCTK_REAL stdv "standard deviation in random velocity/b-field"
+{
+ 0.0:* :: "Positive"
+} 1.0
+
+CCTK_REAL angvelx "Initial Angular velocity in x direction"
+{
+ *:* :: "Positive"
+} 0.0
+CCTK_REAL angvely "Initial Angular velocity in y direction"
+{
+ *:* :: "Positive"
+} 0.0
+CCTK_REAL angvelz "Initial Angular velocity in z direction"
+{
+ *:* :: "Positive"
+} 0.0
+
+CCTK_REAL iBx "initial magnetic field in the x-direction (Gauss)"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL iBy "initial magnetic field in the y-direction (Gauss)"
+{
+ *:* :: "no restriction"
+} 0.0    
+
+CCTK_REAL iBz "initial magnetic field in the z-direction (Gauss)"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL pAmp "parameter to adjust amplitude in FRW spacetime"
+{
+ 0.0:1.0 :: "non-negative and not more than one"
+} 1.0
+
+CCTK_REAL eps_cof "parameter to adjust the energy density in the FRW spacetime" STEERABLE = ALWAYS
+{
+ 0.0:* :: "non-negative"
+} 53.375
+
+CCTK_REAL eps_cof0 "Original value of eps_cof"
+{
+ 0.0:* :: "non-negative"
+} 53.375
+
+# Initial Dark Matter variables
+
+CCTK_REAL irho_dark "initial dark matter density"
+{
+ 0:* :: "Positive"
+} 0.0
+
+# Initial Conditions for Periodic Shock
+
+CCTK_REAL inner_ux "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL inner_uy "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0   
+
+CCTK_REAL inner_uz "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL inner_bx "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL inner_by "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0   
+
+CCTK_REAL inner_bz "inner conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL inner_rho "inner conditions for Periodic Shock"
+{
+ 0:* :: "Positive"
+} 0.0   
+
+CCTK_REAL inner_pp "inner conditions for Periodic Shock"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL outer_ux "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL outer_uy "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0   
+
+CCTK_REAL outer_uz "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL outer_bx "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL outer_by "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0   
+
+CCTK_REAL outer_bz "outer conditions for Periodic Shock"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL outer_rho "outer conditions for Periodic Shock"
+{
+ 0:* :: "Positive"
+} 0.0   
+
+CCTK_REAL outer_pp "outer conditions for Periodic Shock"
+{
+ 0:* :: "Positive"
+} 0.0
+
+CCTK_REAL tensor_spec "Gravitational Wave spectrum"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL vector_spec "Magnetic field spectrum"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL scalar_spec "Scalar Perturbation spectrum"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL velocity_spec "Velocity Perturbation spectrum"
+{
+ *:* :: "no restriction"
+} 0.0
+
+CCTK_REAL Flatness_Ratio "Ratio of Critical Density to Density"
+{
+ *:* :: "no restriction"
+} 1.01
+
+CCTK_REAL xmin0 "Minimum Global Value of Grid - X-axis"
+{
+ *:* :: "no restriction"
+} -4.50e10
+
+CCTK_REAL ymin0 "Minimum Global Value of Grid - Y-axis"
+{
+ *:* :: "no restriction"
+} -4.50e10
+
+CCTK_REAL zmin0 "Minimum Global Value of Grid - Z-axis"
+{
+ *:* :: "no restriction"
+} -4.50e10
+
+CCTK_REAL xmax0 "Maximum Global Value of Grid - X-axis"
+{
+ *:* :: "no restriction"
+} 4.50e10
+
+CCTK_REAL ymax0 "Maximum Global Value of Grid - Y-axis"
+{
+ *:* :: "no restriction"
+} 4.50e10
+
+CCTK_REAL zmax0 "Maximum Global Value of Grid - Z-axis"
+{
+ *:* :: "no restriction"
+} 4.50e10
+

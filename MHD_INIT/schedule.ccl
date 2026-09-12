@@ -1,0 +1,18 @@
+# Schedule definitions for thorn MHD_INIT
+# $Header:$
+
+schedule grmhd_initial IN GRMHD_INIT BEFORE calcbssn
+{
+  LANG: Fortran
+  WRITES: SpecGRMHD::metric(Everywhere)
+  WRITES: SpecGRMHD::curv(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: SpecGRMHD::dotvars(Everywhere)
+} "Set up initial data"
+
+schedule FFT_INIT_START IN GRMHD_INIT BEFORE grmhd_initial
+{
+  LANG: C
+} "Create FFTW Plans"

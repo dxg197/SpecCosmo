@@ -1,0 +1,166 @@
+# Parameter File for Cosmological GRMHD simulation  
+
+ActiveThorns = "SystemStatistics slab boundary cartgrid3d coordbase ioutil initbase vectors carpet carpetreduce carpetioascii carpetiobasic carpetiohdf5 carpetioscalar carpetinterp2 carpetlib carpetregrid2 carpetslab periodiccarpet timers localinterp2 localreduce mol symbase time  nanchecker mhd_analysis mhd_init specgrmhd mpi hdf5 zlib"
+
+time::timestep_method                        = given
+time::timestep                               = 1.0e-14
+
+Cactus::terminate                            = "runtime"
+Cactus::max_runtime                          = 20159
+Cactus::cctk_initial_time                    = 3.884e-12 #4.42e-12 #3.884e-12
+cactus::cctk_timer_output                    = "full"
+
+Nanchecker::check_every                      = 10
+Nanchecker::check_after                      = 10
+Nanchecker::check_vars                       = "specgrmhd::metric mhd_analysis::rho_out mhd_analysis::bb_mag"
+Nanchecker::action_if_found                  = "terminate"
+
+grid::type                                   = "byrange" 
+grid::xmin                                   = -6.20e1 
+grid::xmax                                   =  6.20e1    
+grid::ymin                                   = -6.20e1    
+grid::ymax                                   =  6.20e1    
+grid::zmin                                   = -6.20e1    
+grid::zmax                                   =  6.20e1    
+grid::domain                                 = "full"  
+
+driver::global_nx                            = 132 
+driver::global_ny                            = 132
+driver::global_nz                            = 132 
+driver::ghost_size                           = 2
+
+periodiccarpet::periodic                     = "yes"
+
+Carpet::max_refinement_levels                = 1
+Carpet::refinement_factor                    = 2
+Carpet::enable_all_storage                   = "yes"
+Carpet::poison_new_timelevels                = "no" 
+Carpet::adaptive_stepsize                    = "yes" 
+
+CarpetLib::poison_new_memory                 = "no"  
+
+CarpetRegrid2::regrid_every                  = -1
+
+mol::ode_method                              = "RK45CK"
+mol::AB_Type                                 = "4"
+mol::MoL_Intermediate_Steps                  = 6 
+mol::MoL_Num_Scratch_Levels                  = 6
+mol::RK_stepsize                             = "yes" 
+mol::maximum_relative_error                  = 1.0e-7   
+mol::print_adams_step                        = "no"    
+mol::maximum_increase                        = 1.05    
+mol::maximum_decrease                        = 0.50     
+mol::maximum_stepsize                        = 1.0   
+mol::minimum_stepsize                        = 1.0e-14 
+mol::AB_Step_Type                            = "Norm"
+mol::big_AB_steps                            = "yes" 
+mol::limit_AB_steps                          = "yes"
+mol::disable_prolongation                    = "no"
+
+mhd_init::initial_data                       = "frw_linear"      
+mhd_init::initial_gauge                      = "scale"    
+mhd_init::gauge_condition                    = "none"                      
+mhd_init::initial_mhd                        = "spec"     
+mhd_init::maxbb                              = 0.0 
+mhd_init::eps_cof                            = 53.375  
+mhd_init::eps_cof0                           = 53.375
+mhd_init::aa                                 = 4.028e-16 #3.99e-16 #4.75e-16  
+mhd_init::aa0                                = 1.0
+mhd_init::irho                               = 6.71112e18 #6.64822e18                 
+mhd_init::itemp                              = 2.85e15  
+mhd_init::itime                              = 3.884e-12 #4.42e-12 #3.884e-12
+mhd_init::irho_dark                          = 3.62401e19 #3.59004e19    
+mhd_init::irad                               = 2.9643456281158e31 #2.9643456311389e31  
+mhd_init::maxvel                             = 0.0    
+mhd_init::maxvel_EW                          = 3.5e-3 #2.00e-3 #1.80e-2 #1.05e-2           
+mhd_init::maxvel_QCD                         = 3.5e-6 #2.00e-6 #1.80e-5 #1.05e-5    
+mhd_init::stdv                               = 0.0
+mhd_init::random                             = "no" 
+mhd_init::ts_ratio                           = 0.1
+mhd_init::rho_pert                           = 6.0e-12 #1.40e-8 #1.62e-8                  
+mhd_init::rho_dark_pert                      = 6.0e-12 #1.40e-8 #1.62e-8  
+mhd_init::temp_pert                          = 6.0e-12 #1.40e-8 #1.62e-8    
+mhd_init::pAmp                               = 1.0
+mhd_init::cosmo_constant                     = 9.9366e-36  
+mhd_init::scalar_spec                        = 0.0
+mhd_init::vector_spec                        = 0.0
+mhd_init::tensor_spec                        = 0.0
+mhd_init::velocity_spec                      = 0.0
+mhd_init::Flatness_Ratio                     = 1.00 
+mhd_init::xmin0                              = -1.80e11
+mhd_init::xmax0                              =  1.80e11
+mhd_init::ymin0                              = -1.80e11
+mhd_init::ymax0                              =  1.80e11
+mhd_init::zmin0                              = -1.80e11
+mhd_init::zmax0                              =  1.80e11
+
+specgrmhd::ch                                = 1.0  
+specgrmhd::cp                                = 10.0
+specgrmhd::bound                             = "none"
+specgrmhd::diff                              = "Spectral"   
+specgrmhd::sigma                             = 0.5
+specgrmhd::add_AV_bulk                       = "no"  
+specgrmhd::add_AV_shear                      = "no"   
+specgrmhd::H_parm                            = 1.0
+specgrmhd::slicing                           = "scale"
+specgrmhd::fix_lapse                         = "no"  
+specgrmhd::fix_shift                         = "no"   
+specgrmhd::resistance                        = "yes"  
+specgrmhd::clean                             = "no" 
+specgrmhd::add_DM                            = "yes" 
+specgrmhd::nn                                = 1.0
+specgrmhd::kl                                = 1.0 
+specgrmhd::kq                                = 1.0
+specgrmhd::rho_frac_max                      = 1.0
+specgrmhd::neg_div                           = "yes"
+specgrmhd::charge                            = 1.0 
+specgrmhd::scp                               = 1.0e-2
+specgrmhd::e1                                = 1.0e-15           
+specgrmhd::sensitivity                       = 1.0e-12 
+specgrmhd::Biermann_mode                     = "none"
+specgrmhd::reconstruction                    = "yes" 
+specgrmhd::TrK_max                           = 0.0 
+
+mhd_analysis::calc_spec                      = "yes" 
+mhd_analysis::data_out_scale                 = 9.09e-4   
+mhd_analysis::calc_transition                = "yes" 
+mhd_analysis::calc_expansion                 = "yes"
+mhd_analysis::EW_scale                       = 6.205e-16 #6.15e-16 #7.31e-16 
+mhd_analysis::QCD_scale                      = 6.682e-13 #6.62e-13 #7.87e-13
+mhd_analysis::Nuc_scale                      = 2.725e-9  #2.70e-9  #3.21e-9 
+mhd_analysis::trans_time_EW                  = 0.1
+mhd_analysis::trans_time_QCD                 = 0.1
+mhd_analysis::clean_scalars                  = "no"
+mhd_analysis::keep_flat                      = "yes"
+mhd_analysis::min_rho_ratio                  = 0.99
+mhd_analysis::max_rho_ratio                  = 1.01
+
+iobasic::outinfo_every                       = 10
+iobasic::outinfo_vars                        = "mhd_analysis::univ_age mhd_analysis::scale_output mhd_analysis::rho_out_frac mhd_analysis::vv_mag" 
+
+IOScalar::outScalar_every                    = 10
+IOScalar::outScalar_reductions               = "minimum maximum average norm2"
+IOScalar::outScalar_vars                     = "specgrmhd::evolvevars specgrmhd::calcvars specgrmhd::adm_bssn_cons mhd_analysis::output mhd_analysis::real_time mhd_analysis::scale_factor specgrmhd::bssn_variables_Misc specgrmhd::bssn_variables"
+
+IOASCII::out1D_every                         = 100
+IOASCII::out1D_vars                          = "specgrmhd::calcvars mhd_analysis::output specgrmhd::evolvevars"
+IOASCII::out2D_every                         = 100  
+IOASCII::out2D_vars                          = "mhd_analysis::output"
+IOASCII::out3D_every                         = 100
+IOASCII::out3D_vars                          = "mhd_analysis::output"
+
+IOHDF5::out_every                            = 25  
+IOHDF5::out_vars                             = "mhd_analysis::output" 
+
+IOHDF5::checkpoint                           = "yes" 
+IOUtil::checkpoint_every                     = 100
+IOUtil::checkpoint_keep                      = 1
+IOUtil::checkpoint_on_terminate              = "yes"
+
+IO::checkpoint_dir                           = "project/biermann/CheckPoints"       
+
+IO::out_dir                                  = "project/biermann/VIZ_128_GRc_10PC"      
+
+#IO::recover                                  = "auto"
+#IO::recover_dir                              = "project/biermann/CheckPoints"   
+#IO::recover_file                             = "checkpoint.chkpt"

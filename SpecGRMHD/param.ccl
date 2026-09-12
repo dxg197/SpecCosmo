@@ -1,0 +1,220 @@
+# Parameter definitions for thorn SpecGRMHD
+# $Header:$
+
+shares: MHD_INIT
+
+USES CCTK_REAL aa
+USES CCTK_REAL aa0
+USES CCTK_REAL nw
+USES CCTK_REAL Amp
+USES CCTK_REAL eps_cof
+USES CCTK_REAL eps_cof0
+USES CCTK_REAL cosmo_constant
+USES CCTK_REAL irad
+USES KEYWORD gowdytyp
+USES KEYWORD gauge_condition
+USES BOOLEAN nonrel
+
+shares: MethodOfLines
+
+USES CCTK_INT MoL_Num_Evolved_Vars
+USES CCTK_INT MoL_Num_Constrained_Vars
+USES CCTK_INT MoL_Num_SaveAndRestore_Vars
+
+shares: boundary
+
+shares: MHD_Analysis
+
+USES CCTK_REAL QCD_scale
+USES BOOLEAN clean_scalars
+
+restricted:
+
+CCTK_INT MHD_MaxNumEvolvedVars \
+	"The maximum number of evolved variables used by MHD" \
+	ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+{
+  51:650	:: "space-time, rho_star, tau, momentum and b-field"
+} 650
+
+CCTK_INT MHD_MaxNumConstrainedVars \
+	"The maximum number of constrained variables used by MHD" \
+	ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
+{
+  0:650		:: "metric, invmetric, curv, gauge, Primative variables, etc..."
+} 650
+
+CCTK_INT MHD_MaxNumSandRVars \
+	"The maximum number of save and restore variables used by MHD" \
+	ACCUMULATOR-BASE=MethodofLines::MoL_Num_SaveAndRestore_Vars
+{
+ 0:650    	:: "Derivatives and Temp Variables"
+} 650
+
+KEYWORD bound "Type of boundary condition to use"
+{
+  "none"      :: "Apply no boundary condition"
+  "flat"      :: "Flat (von Neumann, n grad phi = 0) boundary condition"
+  "static"    :: "Static (Dirichlet, dphi/dt=0) boundary condition"
+  "radiation" :: "Radiation boundary condition"
+  "robin"     :: "Robin (phi(r) = C/r) boundary condition"
+  "zero"      :: "Zero (Dirichlet, phi=0) boundary condition"
+} "none"
+
+CCTK_REAL sensitivity "sensitivity of Netwon-Raphson Solver"
+{
+  0:1.0         :: "much less than 1.0"
+} 1.0e-10
+
+CCTK_REAL gam "gamma law EOS parameter" STEERABLE = ALWAYS
+{
+  0:*         :: "Usually between 4/3 and 2"
+} 1.3333333333333333333333333333333333333333333333333333333333333333333333333333
+
+CCTK_REAL ch "hyperbolic divergence cleaning parameter"
+{
+  0:*         :: "Positive"
+} 1.0
+
+CCTK_REAL cp "parabolic divergence cleaning parameter"
+{
+  0:*         :: "Positive"
+} 10.0
+
+BOOLEAN resistance "Add nonzero resistivity"
+{
+} no
+
+BOOLEAN add_AV_bulk "Add Bulk Artificial Viscosity"
+{
+} no
+
+BOOLEAN add_AV_shear "Add Shear Artificial Viscosity"
+{
+} no
+
+BOOLEAN neg_div "require the divergence of velocity to be negative for shear AV"
+{
+} yes
+
+CCTK_REAL kl "artificial viscosity parameter"
+{
+  0:*         :: "Positive"
+} 1.0
+
+CCTK_REAL kq "artificial viscosity parameter"
+{
+  0:*         :: "Positive"
+} 1.1666666666666666666666666666666666666666666666666666666666666666666666667
+
+CCTK_REAL nn "artificial viscosity parameter"
+{
+  *:*         :: "Any number"
+} 0.0
+
+
+CCTK_REAL H_parm "gamma driver parameter for shift"
+{
+  *:*         :: "Any Number"
+} 1.0
+
+KEYWORD slicing "Type of lapse evolution method to use"
+{
+  "1+log"        :: "1+log slicing"
+  "scale"        :: "conformal time slicing"
+  "harmonic"     :: "harmonic slicing"
+  "None"         :: "must use fix_lapse = yes"
+} "None"
+
+BOOLEAN fix_lapse "Keep Lapse Constant"
+{
+} yes
+
+BOOLEAN fix_shift "Keep Shift Constant"
+{
+} yes
+
+BOOLEAN clean "Use Divergence Cleaning"
+{
+} yes
+
+CCTK_REAL eta "dynamic shift parameter"
+{
+  *:*         :: "Anything"
+} 0.75
+
+CCTK_REAL sigma "desnsitized lapse parameter"
+{
+  *:*         :: "Anything"
+} 0.5
+
+KEYWORD diff "Type of differencing method to use"
+{
+  "Finite"       :: "2nd Order Finite Differencing"
+  "Finite4"      :: "4th Order Finite Differencing"
+  "Spectral"     :: "Spectral Methods"
+  "Spectral_1d"  :: "Spectral Methods (One Dimension)"
+  "SCR3"         :: "4th Order Finite Differencing with R=3 SC"
+  "None"         :: "Don't use Differencing (Testing Only)"
+} "Finite"
+
+BOOLEAN add_DM "Add Dark Matter to the system"
+{
+} no
+
+BOOLEAN reconstruction "Do Reconstruction to handle shocks"
+{
+} yes
+
+CCTK_REAL scp "Shock Capturing % diff trigger"
+{
+  0:*         :: "Positive"
+} 1.0e-2
+
+CCTK_REAL e1 "Shock Capturing % diff trigger"
+{
+  0:*         :: "Positive"
+} 1.0e-15
+
+CCTK_REAL C0 "Un-Optimized Weighting Factor Index 0"
+{
+  0:*         :: "Positive"
+} 0.1
+
+CCTK_REAL C1 "Un-Optimized Weighting Factor Index 1"
+{
+  0:*         :: "Positive"
+} 0.6
+
+CCTK_REAL C2 "Un-Optimized Weighting Factor Index 2"
+{
+  0:*         :: "Positive"
+} 0.3
+
+CCTK_REAL po "Integer Factor"
+{
+  0:*         :: "Positive"
+} 2.0
+
+CCTK_REAL charge "Fluid Charge"
+{
+  *:*         :: "Any Number in units of electron charge"
+} 1.0
+
+CCTK_REAL rho_frac_max "Maximum Relative density before Artificial Viscosity becomes active"
+{
+  0:*         :: "Positive"
+} 0.1
+
+CCTK_REAL TrK_max "Maximum value of TrK"
+{
+  *:*         :: "Any number"
+} 0.0
+
+KEYWORD Biermann_mode "EW or QCD Plasma"  STEERABLE = ALWAYS
+{
+  "none"      :: "No Biermann mode"
+  "EW"        :: "Electroweak Phase Transition"
+  "QCD"       :: "QCD Phase Transition"
+  "Nuc"       :: "Primordial Nucleosynthesis"
+} "none"

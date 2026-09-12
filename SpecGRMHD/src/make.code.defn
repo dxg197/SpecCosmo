@@ -1,0 +1,24 @@
+# Main make.code.defn file for thorn SpecGRMHD
+# $Header:$
+
+# Source files in this directory
+SRCS = ADM-2-BSSN.c BSSN-2-ADM.c Evolution-BSSN.c Evolution-MHD.c \
+       InitSymBound.c MoLRegister.c Startup.c Evolution-Dark.c \
+       SpecDeriv_Scalar.c SpecDeriv_Scalar2.c SpecDeriv_Vector.c \
+       SpecDeriv_Vector2.c SpecDeriv_Tensor.c SpecDeriv_Tensor2.c \
+       SpecDeriv_Tensor_4D.c SpecDeriv_Tensor2_4D.c \
+       SpecDeriv_Scalar_FD.c SpecDeriv_Scalar2_FD.c SpecDeriv_Vector_FD.c \
+       SpecDeriv_Vector2_FD.c SpecDeriv_Tensor_FD.c SpecDeriv_Tensor2_FD.c \
+       SpecDeriv_Tensor_4D_FD.c SpecDeriv_Tensor2_4D_FD.c \
+       SpecDeriv_Scalar_FD4.c SpecDeriv_Scalar2_FD4.c SpecDeriv_Vector_FD4.c \
+       SpecDeriv_Vector2_FD4.c SpecDeriv_Tensor_FD4.c SpecDeriv_Tensor2_FD4.c \
+       SpecDeriv_Tensor_4D_FD4.c SpecDeriv_Tensor2_4D_FD4.c \
+       SpecDeriv_Scalar_1d.c SpecDeriv_Scalar2_1d.c SpecDeriv_Vector_1d.c \
+       SpecDeriv_Vector2_1d.c SpecDeriv_Tensor_1d.c SpecDeriv_Tensor2_1d.c \
+       SpecDeriv_Tensor_4D_1d.c SpecDeriv_Tensor2_4D_1d.c \
+       SpecDeriv_Scalar_SCR3.c SpecDeriv_Vector_SCR3.c \
+       SpecDeriv_Tensor_SCR3.c SpecDeriv_Tensor_4D_SCR3.c Calc_A.c B_Clean.c \
+       matrix.c
+
+# Subdirectories containing source files
+SUBDIRS = 

@@ -1,0 +1,119 @@
+# arrangement/thorn                # implements (inherits) [friend] {shares}
+#
+#CTThorns/CT_Analytic               # CT_Analytic (Boundary,GenericFD,Grid) [ ] {GenericFD,MethodOfLines}
+#CTThorns/CT_MultiLevel             # CT_MultiLevel (Grid) [ ] {admbase}
+CactusBase/Boundary                # boundary ( ) [ ] { }
+CactusBase/CartGrid3D              # grid (coordbase) [ ] {driver}
+CactusBase/CoordBase               # CoordBase ( ) [ ] { }
+CactusBase/Fortran                 # Fortran ( ) [ ] { }
+CactusBase/IOASCII                 # IOASCII ( ) [ ] {IO}
+CactusBase/IOBasic                 # IOBasic (IO) [ ] {IO}
+CactusBase/IOUtil                  # IO ( ) [ ] { }
+CactusBase/InitBase                # InitBase ( ) [ ] { }
+CactusBase/SymBase                 # SymBase ( ) [ ] { }
+CactusBase/Time                    # time ( ) [ ] {cactus}
+#CactusConnect/HTTPD                # HTTPD (Socket) [ ] {Cactus}
+#CactusConnect/HTTPDExtra           # http_utils ( ) [ ] { }
+#CactusConnect/Socket               # Socket ( ) [ ] { }
+#CactusDoc/CoreDoc                  # CoreDoc ( ) [ ] { }
+#CactusElliptic/EllBase             # ellbase ( ) [ ] { }
+#CactusElliptic/EllPETSc            # ellpetsc (ellbase,driver) [ ] {grid,ellbase}
+#CactusElliptic/EllSOR              # ellsor (ellbase,boundary) [ ] {ellbase}
+#CactusElliptic/TATPETSc            # TATPETSc (TATelliptic) [ ] { }
+#CactusElliptic/TATelliptic         # TATelliptic ( ) [ ] { }
+CactusIO/IOJpeg                    # IOJpeg (IO) [ ] {IO}
+#CactusNumerical/Cartoon2D          # cartoon2d ( ) [ ] { }
+#CactusNumerical/Dissipation        # Dissipation (grid,SphericalSurface,SpaceMask) [ ] {SpaceMask}
+CactusNumerical/InterpToArray      # InterpToArray ( ) [ ] { }
+CactusNumerical/LocalInterp        # LocalInterp ( ) [ ] { }
+#CactusNumerical/LocalInterp2       # LocalInterp ( ) [ ] { }
+CactusNumerical/LocalReduce        # LocalReduce ( ) [ ] { }
+CactusNumerical/MoL                # MethodOfLines ( ) [ ] {Cactus}
+CactusNumerical/Noise              # Noise (grid) [ ] { }
+CactusNumerical/Norms              # Norms ( ) [ ] { }
+CactusNumerical/Periodic           # Periodic ( ) [ ] { }
+#CactusNumerical/ReflectionSymmetry # ReflectionSymmetry ( ) [ ] { }
+#CactusNumerical/RotatingSymmetry180 # RotatingSymmetry180 ( ) [ ] { }
+#CactusNumerical/RotatingSymmetry90 # RotatingSymmetry90 ( ) [ ] { }
+CactusNumerical/Slab               # Slab ( ) [ ] { }
+#CactusNumerical/SlabTest           # SlabTest (Slab) [ ] { }
+#CactusNumerical/SpaceMask          # SpaceMask (grid) [ ] { }
+#CactusNumerical/SphericalSurface   # SphericalSurface (grid) [ ] { }
+#CactusNumerical/SummationByParts   # SummationByParts ( ) [ ] { }
+#CactusNumerical/TensorTypes        # TensorTypes ( ) [ ] { }
+#CactusNumerical/TestLocalInterp2   # TestLocalInterp2 (Grid) [ ] { }
+#CactusNumerical/TestLocalReduce    # TestLocalReduce ( ) [ ] { }
+CactusPUGH/PUGH                    # Driver ( ) [ ] {cactus}
+CactusPUGH/PUGHInterp              # Interp ( ) [ ] { }
+CactusPUGH/PUGHReduce              # Reduce ( ) [ ] { }
+CactusPUGH/PUGHSlab                # Hyperslab ( ) [ ] { }
+CactusPUGHIO/IOHDF5                # IOHDF5 ( ) [ ] {IO}
+CactusPUGHIO/IOHDF5Util            # IOHDF5Util (IO) [ ] {IO}
+#CactusUtils/Accelerator            # Accelerator ( ) [ ] { }
+#CactusUtils/Formaline              # Formaline ( ) [ ] {IO}
+#CactusUtils/MemSpeed               # MemSpeed ( ) [ ] { }
+#CactusUtils/NaNCatcher             # NaNCatcher ( ) [ ] { }
+CactusUtils/NaNChecker             # NaNChecker (Reduce) [ ] { }
+CactusUtils/Nice                   # nice ( ) [ ] { }
+#CactusUtils/NoMPI                  # NoMPI ( ) [ ] { }
+#CactusUtils/OpenCLRunTime          # OpenCLRunTime ( ) [ ] {IO,Accelerator}
+CactusUtils/SystemStatistics       # SystemStatistics ( ) [ ] { }
+#CactusUtils/SystemTopology         # SystemTopology ( ) [ ] { }
+#CactusUtils/TerminationTrigger     # TerminationTrigger ( ) [ ] {IO}
+CactusUtils/TimerReport            # timerreport ( ) [ ] {IO}
+#CactusUtils/Trigger                # trigger (IO) [ ] { }
+#CactusUtils/Vectors                # Vectors ( ) [ ] { }
+#CactusUtils/WatchDog               # WatchDog ( ) [ ] { }
+#Carpet/Carpet                      # Driver ( ) [ ] {Cactus,InitBase,IO,CarpetLib}
+#Carpet/CarpetEvolutionMask         # CarpetEvolutionMask ( ) [ ] { }
+#Carpet/CarpetIOASCII               # IOASCII ( ) [ ] {IO}
+#Carpet/CarpetIOBasic               # IOBasic (IO) [ ] {IO}
+#Carpet/CarpetIOHDF5                # IOHDF5 ( ) [ ] {IO,Cactus}
+#Carpet/CarpetIOScalar              # IOScalar ( ) [ ] {IO}
+#Carpet/CarpetIntegrateTest         # CarpetIntegrateTest (Reduce,Grid,Driver) [ ] { }
+#Carpet/CarpetInterp                # interp ( ) [ ] { }
+#Carpet/CarpetInterp2               # interp2 ( ) [ ] { }
+#Carpet/CarpetLib                   # CarpetLib ( ) [ ] {IO}
+#Carpet/CarpetMask                  # CarpetMask (grid,SphericalSurface) [ ] {SphericalSurface}
+#Carpet/CarpetProlongateTest        # CarpetProlongateTest (grid) [ ] { }
+#Carpet/CarpetReduce                # reduce ( ) [ ] { }
+#Carpet/CarpetRegrid                # CarpetRegrid ( ) [ ] { }
+#Carpet/CarpetRegrid2               # CarpetRegrid2 ( ) [ ] { }
+#Carpet/CarpetRegridTest            # CarpetRegridTest (grid) [ ] { }
+#Carpet/CarpetSlab                  # Hyperslab ( ) [ ] { }
+#Carpet/CarpetTracker               # CarpetTracker (SphericalSurface,CarpetRegrid2) [ ] {SphericalSurface}
+#Carpet/CycleClock                  # CycleClock ( ) [ ] { }
+#Carpet/HighOrderWaveTest           # HighOrderWaveTest ( ) [ ] { }
+#Carpet/LoopControl                 # LoopControl (CycleClock) [ ] {IO}
+#Carpet/PeriodicCarpet              # PeriodicCarpet (grid) [ ] { }
+#Carpet/ReductionTest               # ReductionTest (GRHydro,grid) [ ] {grid}
+#Carpet/ReductionTest2              # ReductionTest2 ( ) [ ] {grid}
+#Carpet/ReductionTest3              # ReductionTest3 (grid) [ ] {grid}
+#Carpet/RegridSyncTest              # RegridSyncTest ( ) [ ] { }
+#Carpet/TestCarpetGridInfo          # TestCarpetGridInfo ( ) [ ] { }
+#Carpet/TestLoopControl             # TestLoopControl (grid) [ ] { }
+#Carpet/Timers                      # Timers ( ) [ ] {IO}
+ExternalLibraries/BLAS             # BLAS ( ) [ ] { }
+#ExternalLibraries/FFTW3            # FFTW3 ( ) [ ] { }
+#ExternalLibraries/GSL              # GSL ( ) [ ] { }
+ExternalLibraries/HDF5             # HDF5 ( ) [ ] { }
+ExternalLibraries/LAPACK           # LAPACK ( ) [ ] { }
+#ExternalLibraries/LORENE           # LORENE ( ) [ ] { }
+#ExternalLibraries/LORENE2          # LORENE ( ) [ ] { }
+ExternalLibraries/MPI              # MPI ( ) [ ] { }
+#ExternalLibraries/OpenBLAS         # OpenBLAS ( ) [ ] { }
+#ExternalLibraries/OpenCL           # OpenCL ( ) [ ] { }
+#ExternalLibraries/OpenSSL          # OpenSSL ( ) [ ] { }
+#ExternalLibraries/PAPI             # PAPI ( ) [ ] { }
+#ExternalLibraries/PETSc            # PETSc ( ) [ ] { }
+#ExternalLibraries/hwloc            # hwloc ( ) [ ] { }
+ExternalLibraries/libjpeg          # libjpeg ( ) [ ] { }
+#ExternalLibraries/pciutils         # pciutils ( ) [ ] { }
+#ExternalLibraries/pthreads         # PTHREADS ( ) [ ] { }
+ExternalLibraries/zlib             # zlib ( ) [ ] { }
+#FixedCosmo/MHD_Analysis            # mhd_analysis (SpecGRMHD) [SpecGRMHD,mhd_init] {MHD_INIT,SpecGRMHD}
+#FixedCosmo/MHD_INIT                # mhd_init (SpecGRMHD,GRID) [SpecGRMHD,mhd_analysis] {SpecGRMHD}
+#FixedCosmo/SpecGRMHD               # SpecGRMHD (grid,boundary,Slab) [mhd_init,mhd_analysis] {MHD_INIT,MHD_Analysis,MethodOfLines,boundary}
+SpecCosmo/MHD_Analysis             # mhd_analysis (SpecGRMHD) [SpecGRMHD,mhd_init] {MHD_INIT,SpecGRMHD}
+SpecCosmo/MHD_INIT                 # mhd_init (SpecGRMHD,GRID) [SpecGRMHD,mhd_analysis] {SpecGRMHD}
+SpecCosmo/SpecGRMHD                # SpecGRMHD (grid,boundary,Slab) [mhd_init,mhd_analysis] {MHD_INIT,MethodOfLines,boundary}

@@ -1,0 +1,13 @@
+# Main make.code.defn file for thorn MHD_Analysis
+# $Header:$
+ 
+# Source files in this directory
+SRCS = pointwise_analysis.F90 analysis1.F90 analytic.F90 cactus_analysis.F90 \
+       constants_analysis.F90 coords_analysis.F90 geodesic_analysis.F90 \
+       gaugewave_analysis.F90 gowdylapse_analysis.F90 noise_analysis.F90 \
+       analysis2.F90 analysis3.F90 geod_analysis.F90 spectrum.c Spec_Scalar.c \
+       Spec_Vector.c spectrum.F90 scale_analysis.F90 Scalar_Clean.c expansion.c \
+       transition.c singular.F90 temp_analysis.F90
+
+# Subdirectories containing source files
+SUBDIRS = 

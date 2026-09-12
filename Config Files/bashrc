@@ -1,0 +1,31 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+module purge
+module use /opt/ohpc/pub/moduledeps/intel         
+#module use /opt/ohpc/pub/moduledeps/pgi-18.4 
+module use /opt/ohpc/pub/moduledeps/intel-impi 
+module use /opt/ohpc/pub/intel
+module use /opt/ohpc/admin/modulefiles
+module use /apps/intel/oneapi/modulefiles
+
+alias intel='module load compiler/latest mkl/latest mpi/latest fftw/3.3.8 blas/3.8.0 scalapack/2.0.2' 
+
+alias pgi='module load pgi/18.4 fftw/3.3.8-pgi openmpi/3.1.2-pgi blas/3.8.0 autotools cuda/9.1 cmake/3.10.2' 
+
+alias gnu='module load scalapack/2.0.2 gnu7/7.3.0 hdf5/1.10.1 openblas/0.2.20 openmpi3/3.0.0 fftw/3.3.7'
+
+alias del='rm -i'
+alias bye=logout
+alias logoff=logout  
+alias help=man
+alias key='man -k'

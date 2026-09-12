@@ -1,0 +1,85 @@
+# Schedule definitions for thorn MHD_Analysis
+# $Header:$
+
+STORAGE: output 
+STORAGE: real_time
+STORAGE: analytic
+STORAGE: coordinates
+STORAGE: scale_factor[2]
+
+schedule analysis1 at ANALYSIS before analysis2
+{
+  LANG: Fortran
+  READS: SpecGRMHD::metric(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: MHD_Analysis::output(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+} "Calculate interesting data"
+
+schedule analysis2 at ANALYSIS after analysis1 before analysis3
+{
+  LANG: Fortran
+  READS: MHD_Analysis::output(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::metric(Everywhere)
+  READS: SpecGRMHD::curv(Everywhere)
+  READS: SpecGRMHD::bssn_variables(Everywhere)
+  WRITES: MHD_Analysis::real_time(Everywhere)
+} "Calculate interesting data"
+
+schedule analysis3 at ANALYSIS after analysis2
+{
+  LANG: Fortran
+  READS: MHD_Analysis::output(Everywhere)
+  READS: MHD_Analysis::real_time(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  READS: SpecGRMHD::metric(Everywhere)
+  READS: SpecGRMHD::curv(Everywhere)
+  READS: SpecGRMHD::inv_metric(Everywhere)
+  WRITES: MHD_Analysis::analytic(Everywhere)
+  WRITES: MHD_Analysis::output(Everywhere)
+  WRITES: SpecGRMHD::bssn_variables(Everywhere)
+} "Calculate interesting data"
+
+schedule Spectrum at ANALYSIS after analysis3
+{
+  LANG: C
+  STORAGE: specgrmhd::temp_variables1 
+  STORAGE: specgrmhd::temp_variables2
+  READS: MHD_Analysis::output(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: MHD_Analysis::output(Everywhere)
+} "Calculate Spectrum of Variables"
+
+schedule analysis4 at ANALYSIS after Spectrum
+{
+  LANG: Fortran
+  READS: MHD_Analysis::output(Everywhere)
+  WRITES: MHD_Analysis::real_time(Everywhere)
+  WRITES: MHD_Analysis::output(Everywhere)
+} "Calculate interesting data"
+
+if (calc_expansion) {
+
+schedule Expansion at ANALYSIS after analysis4
+{
+  LANG: C
+  READS: MHD_Analysis::output(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: grid::coordinates(Everywhere)
+} "Calculate New Grid Size"
+
+}
+
+if (calc_transition) {
+
+schedule Transition IN GRMHD_RHS before bssn_RHS 
+{
+  LANG: C
+  READS: MHD_Analysis::output(Everywhere)
+  READS: SpecGRMHD::calcvars(Everywhere)
+  WRITES: SpecGRMHD::evolvevars(Everywhere)
+  WRITES: SpecGRMHD::calcvars(Everywhere)
+} "Calculate New Grid Size"
+
+}

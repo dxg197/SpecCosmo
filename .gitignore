@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# iCloud
+*.icloud
+
+# Cactus build artifacts
+configs/
+exe/
+*.o
+*.a
+*.so
+*.mod
+*.d
+
+# Editor/backup files
+*~
+*.swp
